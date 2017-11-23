@@ -1,0 +1,17 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatStore", "DatStore\DatStore.csproj", "{E0424D6C-60BC-4AA2-A7E5-7EAE741CB0A4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E0424D6C-60BC-4AA2-A7E5-7EAE741CB0A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0424D6C-60BC-4AA2-A7E5-7EAE741CB0A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0424D6C-60BC-4AA2-A7E5-7EAE741CB0A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0424D6C-60BC-4AA2-A7E5-7EAE741CB0A4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
