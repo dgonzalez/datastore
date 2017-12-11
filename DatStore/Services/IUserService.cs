@@ -11,5 +11,6 @@ namespace DatStore.Services
         Key AddUser(User user);
         ArrayList FindUsers(int offset, int limit);
         ArrayList FindUsersBySurname(int offset, int limit, string surname);
+        ArrayList FindUsersByNameAndSurname(int offset, int limit, string name, string surname);
     }
 }

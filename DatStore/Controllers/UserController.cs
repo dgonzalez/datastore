@@ -27,7 +27,7 @@ namespace DatStore.Controllers
             int offset = Int32.Parse(HttpContext.Request.Query["offset"]);
             int limit = Int32.Parse(HttpContext.Request.Query["limit"]);
             string surname = HttpContext.Request.Query["surname"];
-            if (surname == null) 
+            if (string.IsNullOrEmpty(surname)) 
             {
                 return _userService.FindUsers(offset, limit);
             }

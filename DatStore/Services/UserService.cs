@@ -7,7 +7,7 @@ using Google.Cloud.Datastore.V1;
 
 namespace DatStore.Services
 {
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
 
@@ -16,7 +16,7 @@ namespace DatStore.Services
             _userRepository = userRepository;
         }
 
-        public Key AddUser(User user) 
+        public Key AddUser(User user)
         {
             return _userRepository.AddUser(user);
         }
@@ -26,9 +26,14 @@ namespace DatStore.Services
             return _userRepository.FindUsers(offset, limit);
         }
 
-        public ArrayList FindUsersBySurname(int offset, int limit, string surname) 
+        public ArrayList FindUsersBySurname(int offset, int limit, string surname)
         {
             return _userRepository.FindUsersBySurname(offset, limit, surname);
+        }
+
+        public ArrayList FindUsersByNameAndSurname(int offset, int limit, string name, string surname)
+        {
+            return _userRepository.FindUsersByNameAndSurname(offset, limit, name, surname);
         }
     }
 }

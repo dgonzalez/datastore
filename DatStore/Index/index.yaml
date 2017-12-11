@@ -1,0 +1,13 @@
+﻿indexes:
+
+- kind: User
+  properties:
+  - name: name
+  - name: surname
+  - name: dob
+    direction: desc
+- kind: User
+  properties:
+  - name: surname
+  - name: dob
+    direction: desc

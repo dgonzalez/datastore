@@ -42,13 +42,25 @@
             <button type="button" class="btn btn-success save" style="margin-right: 40px" >Save</button>
             <button type="button" class="btn btn-warning">Cancel</button>
         </div>
+
+
+        <h1>Find User</h1>
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Name:</span>
+            <input type="text" class="form-control" placeholder="Name" aria-describedby="basic-addon1" name="searchName">
+        </div>
+        &nbsp;
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Surname:</span>
+            <input type="text" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2" name="searchSurname">
+        </div>
+        &nbsp;
+        <div class="input-group" style="float: right; margin-top: 30px">
+            <button type="button" class="btn btn-success search" style="margin-right: 40px">Search</button>
+        </div>
+
     </div>
     <div style="float:left; margin-left: 50px; margin-top: 30px; width: 600px">
-        <div class="input-group">
-            <span class="input-group-addon">Filter:</span>
-            <input type="text" class="form-control filter" id="basic-url" aria-describedby="basic-addon3" name="filter">
-
-        </div>
         <table class="table">
             <thead>
                 <tr>
@@ -63,24 +75,37 @@
 
             </tbody>
         </table>
+        <div>
+            <button id="backward"><span class="glyphicon glyphicon-backward" ></span></button>
+            <button id="forward"><span class="glyphicon glyphicon-forward"></span></button>
+        </div>
     </div>
 
     <script>
-        function refresh(surname) {
-            $.get('/api/user?offset=0&limit=1000&surname=' + surname, function (users) {
-                var stringUsers = ""
+        var pageSize = 10;
+        var offset = 0;
+        var limit = 10;
 
-                for (var user of users) {
-                    var userString = "<tr>"
-                    userString += "<td>" + user.name + "</td>"
-                    userString += "<td>" + user.surname + "</td>"
-                    userString += "<td>" + user.gender + "</td>"
-                    userString += "<td>" + user.dob + "</td>"
-                    userString += "</tr>"
-                    stringUsers += userString
-                }
-                $('tbody[name=users]').html(stringUsers)
-            })
+        function populate(users) {
+            var stringUsers = ""
+
+            for (var user of users) {
+                var userString = "<tr>"
+                userString += "<td>" + user.name + "</td>"
+                userString += "<td>" + user.surname + "</td>"
+                userString += "<td>" + user.gender + "</td>"
+                userString += "<td>" + user.dob + "</td>"
+                userString += "</tr>"
+                stringUsers += userString
+            }
+            $('tbody[name=users]').html(stringUsers)
+
+        }
+        function refresh() {
+            var params = {}
+            params.offset = offset;
+            params.limit = limit;
+            $.get('/api/user?' + $.param(params), populate)
         }
 
         $(document).ready(function() {
@@ -101,18 +126,45 @@
 
                 $.post('/api/user', JSON.stringify(user))
                     .done(function (data) {
-                        refresh('')
+                        refresh()
                     })
                     .fail(function (err) {
                         alert('error!')
                     })
             })
 
-
-            $('input[name=filter]').change(function () {
-                refresh($(this).val())
+            $('button.search').click(function () {
+                var searchUser = {}
+                searchUser.name = $('input[name=searchName]').val()
+                searchUser.surname = $('input[name=searchSurname]').val()
+                console.log('/api/user/search'+ $.param(searchUser))
+                $.get('/api/user/search?'+ $.param(searchUser))
+                    .done(function (data) {
+                        populate(data)
+                    })
+                    .fail(function (err) {
+                        console.log(err)
+                        alert('error!')
+                    })
             })
-            refresh('')
+
+
+            $('#backward').click(function () {
+                offset = offset - pageSize
+                offset = offset < 0? 0 : offset
+
+                refresh()
+            })
+
+            $('#forward').click(function () {
+                offset = offset + pageSize
+                offset = offset < 0? 0 : offset
+
+                refresh()
+            })
+
+
+            refresh()
         })
     </script>
 

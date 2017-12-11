@@ -50,7 +50,8 @@ namespace DatStore.Repositories
             Query query = new Query("User")
             {
                 Limit = limit,
-                Offset = offset
+                Offset = offset,
+                Order = { { "dob", PropertyOrder.Types.Direction.Descending } }
             };
 
             IEnumerable<Entity> entities = _db.RunQuery(query).Entities;
@@ -72,7 +73,40 @@ namespace DatStore.Repositories
             {
                 Limit = limit,
                 Offset = offset,
-                Filter = Filter.And(Filter.GreaterThanOrEqual("surname", surname), Filter.LessThan("surname", surname + "\ufffd")) // Trick.
+                Filter = Filter.And(Filter.GreaterThanOrEqual("surname", surname), Filter.LessThan("surname", surname + "\ufffd")), // Trick
+                Order = { { "dob", PropertyOrder.Types.Direction.Descending } }
+            };
+
+            IEnumerable<Entity> entities = _db.RunQuery(query).Entities;
+            ArrayList users = new ArrayList();
+            foreach (Entity entity in entities)
+            {
+                User user = new User();
+                user.Name = entity.Properties["name"].StringValue;
+                user.Surname = entity.Properties["surname"].StringValue;
+                user.Dob = entity.Properties["dob"].StringValue;
+                user.Gender = entity.Properties["gender"].StringValue;
+                users.Add(user);
+            }
+            return users;
+        }
+
+        public ArrayList FindUsersByNameAndSurname(int offset, int limit, string name, string surname)
+        {
+            Filter filter = null;
+
+            if (string.IsNullOrEmpty(name)) {
+                filter = Filter.Equal("surname", surname);
+            } else {
+                filter = Filter.And(Filter.Equal("name", name), Filter.Equal("surname", surname));
+            }
+
+            Query query = new Query("User")
+            {
+                Limit = limit,
+                Offset = offset,
+                Order = { { "dob", PropertyOrder.Types.Direction.Descending } },
+                Filter = filter
             };
 
             IEnumerable<Entity> entities = _db.RunQuery(query).Entities;
