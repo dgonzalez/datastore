@@ -4,10 +4,10 @@
   properties:
   - name: name
   - name: surname
-  - name: dob
+  - name: dob_timestamp
     direction: desc
 - kind: User
   properties:
   - name: surname
-  - name: dob
+  - name: dob_timestamp
     direction: desc

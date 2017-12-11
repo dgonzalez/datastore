@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using DatStore.Model;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Datastore.V1;
@@ -21,6 +22,7 @@ namespace DatStore.Repositories
 
         public Key AddUser(User user)
         {
+            DateTime dateTime = DateTime.SpecifyKind(DateTime.ParseExact(user.Dob, "dd/MM/yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc);
             Entity entity = new Entity()
             {
                 Key = _keyFactory.CreateIncompleteKey(),
@@ -39,6 +41,10 @@ namespace DatStore.Repositories
                 ["dob"] = new Value()
                 {
                     StringValue = user.Dob
+                },
+                ["dob_timestamp"] = new Value()
+                {
+                    TimestampValue = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(dateTime)
                 }
             };
             return _db.Insert(entity);
@@ -51,7 +57,7 @@ namespace DatStore.Repositories
             {
                 Limit = limit,
                 Offset = offset,
-                Order = { { "dob", PropertyOrder.Types.Direction.Descending } }
+                Order = { { "dob_timestamp", PropertyOrder.Types.Direction.Descending } }
             };
 
             IEnumerable<Entity> entities = _db.RunQuery(query).Entities;
@@ -74,7 +80,7 @@ namespace DatStore.Repositories
                 Limit = limit,
                 Offset = offset,
                 Filter = Filter.And(Filter.GreaterThanOrEqual("surname", surname), Filter.LessThan("surname", surname + "\ufffd")), // Trick
-                Order = { { "dob", PropertyOrder.Types.Direction.Descending } }
+                Order = { { "dob_timestamp", PropertyOrder.Types.Direction.Descending } }
             };
 
             IEnumerable<Entity> entities = _db.RunQuery(query).Entities;
@@ -105,7 +111,7 @@ namespace DatStore.Repositories
             {
                 Limit = limit,
                 Offset = offset,
-                Order = { { "dob", PropertyOrder.Types.Direction.Descending } },
+                Order = { { "dob_timestamp", PropertyOrder.Types.Direction.Descending } },
                 Filter = filter
             };
 
