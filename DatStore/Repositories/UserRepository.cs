@@ -106,6 +106,7 @@ namespace DatStore.Repositories
             } else {
                 filter = Filter.And(Filter.Equal("name", name), Filter.Equal("surname", surname));
             }
+            Filter.And(filter, Filter.And(Filter.GreaterThan("name", "david")));
 
             Query query = new Query("User")
             {
@@ -128,5 +129,34 @@ namespace DatStore.Repositories
             }
             return users;
         }
+
+        public ArrayList FindByMultipleCriteria(int offset, int limit, params SearchCriteria[] args)
+        {
+            Filter filter = Filter.Equal(args[0].Key, args[0].Value);
+            for (int i = 1; i < args.Length; i++) {
+                filter = Filter.And(filter, Filter.Equal(args[i].Key, args[i].Value));
+            }
+
+            Query query = new Query("User")
+            {
+                Filter = filter,
+                Offset = offset,
+                Limit = limit
+            };
+
+            IEnumerable<Entity> entities = _db.RunQuery(query).Entities;
+            ArrayList users = new ArrayList();
+            foreach (Entity entity in entities)
+            {
+                User user = new User();
+                user.Name = entity.Properties["name"].StringValue;
+                user.Surname = entity.Properties["surname"].StringValue;
+                user.Dob = entity.Properties["dob"].StringValue;
+                user.Gender = entity.Properties["gender"].StringValue;
+                users.Add(user);
+            }
+            return users;
+        }
     }
+
 }

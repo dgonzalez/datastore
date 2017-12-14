@@ -12,5 +12,6 @@ namespace DatStore.Repositories
         ArrayList FindUsers(int offset, int limit);
         ArrayList FindUsersBySurname(int offset, int limit, string surname);
         ArrayList FindUsersByNameAndSurname(int offset, int limit, string name, string surname);
+        ArrayList FindByMultipleCriteria(int offset, int limit, params SearchCriteria[] args);
     }
 }

@@ -20,8 +20,8 @@ namespace DatStore.Controllers
         {
             string surname = HttpContext.Request.Query["surname"];
             string name = HttpContext.Request.Query["name"];
-
-            return _userService.FindUsersByNameAndSurname(0, 1000, name, surname);
+            return _userService.FindUsersByMultipleCriteria(0, 1000, name, surname);
+            //return _userService.FindUsersByNameAndSurname(0, 1000, name, surname);
         }
     }
 }

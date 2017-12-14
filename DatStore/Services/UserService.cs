@@ -35,5 +35,10 @@ namespace DatStore.Services
         {
             return _userRepository.FindUsersByNameAndSurname(offset, limit, name, surname);
         }
+
+        public ArrayList FindUsersByMultipleCriteria(int offset, int limit,string name, string surname)
+        {
+            return _userRepository.FindByMultipleCriteria(offset, limit, new SearchCriteria("name", name), new SearchCriteria("surname", surname));
+        }
     }
 }

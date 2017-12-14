@@ -11,3 +11,8 @@
   - name: surname
   - name: dob_timestamp
     direction: desc
+- kind: User
+  properties:
+  - name: name
+  - name: dob_timestamp
+    direction: desc
